@@ -4,6 +4,8 @@ using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Documents.Extensions;
 using Lucene.Net.Index;
+using Lucene.Net.QueryParsers.Classic;
+using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
 using LuceneAsyncInputsPoc.CustomDirectory;
@@ -20,8 +22,10 @@ string snapshotDir = Directory.CreateDirectory(Path.Combine(root, "snapshot")).F
 
 Console.WriteLine($"Working in: {root}");
 
-CustomSimpleFSDirectory directory = new CustomSimpleFSDirectory(indexDir);
-IndexWriterConfig config = new IndexWriterConfig(LuceneVersion.LUCENE_48, new StandardAnalyzer(LuceneVersion.LUCENE_48));
+LuceneVersion version = LuceneVersion.LUCENE_48;
+CustomSimpleFSDirectory directory = new(indexDir);
+StandardAnalyzer analyzer = new(version);
+IndexWriterConfig config = new(version, analyzer);
 config.IndexDeletionPolicy = new SnapshotDeletionPolicy(config.IndexDeletionPolicy);
 
 IndexWriter writer = new IndexWriter(directory, config);
@@ -47,15 +51,12 @@ Write("Thomas", "Cruise", 60);
 Write("Keanu", "Reeves", 58);
 Write("Hugh", "Jackman", 54);
 Write("Ryan", "Reynolds", 46);
-
 writer.Flush(false, true);
 writer.Commit();
 
 SnapshotDeletionPolicy sdp = (writer.Config.IndexDeletionPolicy as SnapshotDeletionPolicy)!;
 IndexCommit commit = sdp.Snapshot();
-
 CustomSimpleFSDirectory dir = (commit.Directory as CustomSimpleFSDirectory)!;
-
 foreach (string fileName in commit.FileNames)
 {
     IndexInput input = dir.OpenInput(fileName, IOContext.READ_ONCE);
@@ -63,5 +64,24 @@ foreach (string fileName in commit.FileNames)
     await using FileStream output = File.Create(Path.Combine(snapshotDir, fileName));
     await streamWrapper.CopyToAsync(output);
 }
+sdp.Release(commit);
+
+Write("Brianna", "Hildebrand", 26);
+Write("Morena", "Baccarin", 43);
+Write("Natalie", "Portman", 41);
+writer.Flush(false, true);
+writer.Commit();
+
+
+IndexSearcher searcher = new(writer.GetReader(true));
+
+TopDocs results = searcher.Search(new TermQuery(new Term("name", "Thomas")), 10);
+
+Console.WriteLine($"Found: {results.TotalHits}");
+foreach (ScoreDoc doc in results.ScoreDocs)
+{
+    Console.WriteLine(searcher.Doc(doc.Doc).GetField("$$RAW"));
+}
+
 
 //writer.GetReader(true).
