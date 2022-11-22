@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuceneAsyncInputsPoc", "LuceneAsyncInputsPoc\LuceneAsyncInputsPoc.csproj", "{91E43974-8517-41DB-8EB5-2CF1FB17CF43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91E43974-8517-41DB-8EB5-2CF1FB17CF43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91E43974-8517-41DB-8EB5-2CF1FB17CF43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91E43974-8517-41DB-8EB5-2CF1FB17CF43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91E43974-8517-41DB-8EB5-2CF1FB17CF43}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A818AD46-FAF8-473A-9676-53B4C49898EA}
+	EndGlobalSection
+EndGlobal
